@@ -1,0 +1,12 @@
+/home/zelig/Projects/ttv-emote-profile/src/target/debug/deps/libthiserror_impl-2b882d78a5fdf242.so: /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/lib.rs /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/ast.rs /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/attr.rs /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/expand.rs /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/fmt.rs /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/generics.rs /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/prop.rs /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/valid.rs
+
+/home/zelig/Projects/ttv-emote-profile/src/target/debug/deps/thiserror_impl-2b882d78a5fdf242.d: /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/lib.rs /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/ast.rs /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/attr.rs /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/expand.rs /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/fmt.rs /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/generics.rs /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/prop.rs /home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/valid.rs
+
+/home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/lib.rs:
+/home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/ast.rs:
+/home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/attr.rs:
+/home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/expand.rs:
+/home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/fmt.rs:
+/home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/generics.rs:
+/home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/prop.rs:
+/home/zelig/.cargo/registry/src/github.com-1ecc6299db9ec823/thiserror-impl-1.0.30/src/valid.rs:
