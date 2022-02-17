@@ -1,4 +1,4 @@
-src/target
+/target/
 **/*.rs.bk
 /.idea
 Cargo.lock
