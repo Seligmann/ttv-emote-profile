@@ -1,26 +1,20 @@
-use twitch_irc::login::StaticLoginCredentials;
-use twitch_irc::TwitchIRCClient;
-use twitch_irc::{ClientConfig, SecureTCPTransport};
+extern crate reqwest;
+extern crate select;
 
-#[tokio::main]
-pub async fn main() {
-    // default configuration is to join chat as anonymous.
-    let config = ClientConfig::default();
-    let (mut incoming_messages, client) =
-        TwitchIRCClient::<SecureTCPTransport, StaticLoginCredentials>::new(config);
+use select::document::Document;
+use select::predicate::Name;
 
-    // first thing you should do: start consuming incoming messages,
-    // otherwise they will back up.
-    let join_handle = tokio::spawn(async move {
-        while let Some(message) = incoming_messages.recv().await {
-            println!("Received message: {:?}", message);
-        }
-    });
+fn main() {
+    over_rustle("https://news.ycombinator.com");
+}
 
-    // join a channel
-    client.join("xqcow".to_owned());
+fn over_rustle(url: &str) {
+    let mut resp = reqwest::get(url).unwrap();
+    assert!(resp.status().is_success());
 
-    // keep the tokio executor alive.
-    // If you return instead of waiting the background task will exit.
-    join_handle.await.unwrap();
+    Document::from_read(resp)
+        .unwrap()
+        .find(Name("a"))
+        .filter_map(|n| n.attr("href"))
+        .for_each(|x| println!("{}", x));
 }
