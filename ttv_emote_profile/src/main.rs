@@ -20,7 +20,7 @@ fn main() {
                 let emote: Vec<EmoteInfo> = serde_json::from_str(&message)
                     .expect("json not properly formatted");
                 for each in emote.iter() {
-                    println!("{:?}", each.mut_get());
+                    println!("{:?}", each.get_name());
                 }
             }
         }
@@ -78,7 +78,7 @@ struct ImageInfo {
 }
 
 impl EmoteInfo {
-    fn mut_get(&self) -> &str{
+    fn get_name(&self) -> &str {
         &self.prefix
     }
 }
