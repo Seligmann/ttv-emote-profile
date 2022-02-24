@@ -59,21 +59,6 @@ fn main() {
             }
         }
     }
-
-    // for (x, y) in users {
-    //     println!("{:?}, {:?}", x, y.emote_use);
-    // }
-
-
-    // unique chatters
-    // for user in users.iter() {
-    //     println!("{:?}", user);
-    // }
-
-    // total unique (relative to individual message) uses of each emote
-    // for each in emotes.iter() {
-        // println!("{:?}, {:?}", each.0, each.1);
-    // }
 }
 
 fn download(url: &str, name: &str) {
