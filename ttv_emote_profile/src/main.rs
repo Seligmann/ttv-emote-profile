@@ -14,16 +14,22 @@ fn main() {
         "2022-02-22.txt");
     download("https://cdn.destiny.gg/emotes/emotes.json", "emotes.json");
 
+    let mut emotes = HashMap::new();
+
     if let Ok(lines) = read_lines("./emotes.json") {
         for line in lines {
             if let Ok(message) = line {
                 let emote: Vec<EmoteInfo> = serde_json::from_str(&message)
                     .expect("json not properly formatted");
                 for each in emote.iter() {
-                    println!("{:?}", each.get_name());
+                    emotes.insert(each.get_name().to_string(), 0);
                 }
             }
         }
+    }
+
+    for each in emotes.iter() {
+        println!("{:?}, {:?}", each.0, each.1);
     }
 
     // Go thru chat
