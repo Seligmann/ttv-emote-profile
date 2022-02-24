@@ -5,6 +5,7 @@ use std::io::{self, BufRead, Read};
 use std::fs::File;
 use std::path::Path;
 use std::collections::HashMap;
+use std::ops::Deref;
 use serde::Deserialize;
 
 
@@ -13,12 +14,23 @@ fn main() {
         "2022-02-22.txt");
     download("https://cdn.destiny.gg/emotes/emotes.json", "emotes.json");
 
+    if let Ok(lines) = read_lines("./emotes.json") {
+        for line in lines {
+            if let Ok(message) = line {
+                let emote: Vec<EmoteInfo> = serde_json::from_str(&message)
+                    .expect("json not properly formatted");
+                for each in emote.iter() {
+                    println!("{:?}", each.mut_get());
+                }
+            }
+        }
+    }
+
     // Go thru chat
     if let Ok(lines) = read_lines("./2022-02-22.txt") {
         for line in lines {
             if let Ok(message) = line {
                 // do something with message
-
             }
         }
     }
@@ -49,19 +61,24 @@ struct User {
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "PascalCase")]
 struct EmoteInfo{
-    twitch: bool,
-    theme: i32,
-    image: ImageInfo,
+    image: Vec<ImageInfo>,
+    prefix: String,
+    theme: String,
+    twitch: bool
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "PascalCase")]
 struct ImageInfo {
-    url: String,
-    name: String,
-    mime: String,
     height: i32,
-    width: i32,
+    mime: String,
+    name: String,
+    url: String,
+    width: i32
+}
+
+impl EmoteInfo {
+    fn mut_get(&self) -> &str{
+        &self.prefix
+    }
 }
