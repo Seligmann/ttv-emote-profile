@@ -13,14 +13,14 @@ fn main() {
         "2022-02-22.txt");
     download("https://cdn.destiny.gg/emotes/emotes.json", "emotes.json");
 
-    let mut emotes = HashMap::new();
-    let mut users: HashSet<String> = HashSet::new();
+    let mut emotes: HashMap<String, i32> = HashMap::new();
+    let mut users: HashMap<String, User> = HashMap::new();
 
     // create the initial list of emotes for each user and their count
     if let Ok(lines) = read_lines("./emotes.json") {
         for line in lines {
             if let Ok(message) = line {
-                let emote: Vec<EmoteInfo> = serde_json::from_str(&message)
+                let mut emote: Vec<EmoteInfo> = serde_json::from_str(&message)
                     .expect("json not properly formatted");
                 for each in emote.iter() {
                     emotes.insert(each.get_emote_name().to_string(), 0);
@@ -29,7 +29,7 @@ fn main() {
         }
     }
 
-    // Go thru chat and check for emote usage in messages
+    // Go thru chat
     if let Ok(lines) = read_lines("./2022-02-22.txt") {
         for line in lines {
             if let Ok(message) = line {
@@ -41,20 +41,29 @@ fn main() {
                 let mut username_in_msg = &message[start_of_username_in_msg..end_of_username_in_msg];
 
                 // Check if username is unique relative to day
-                if !users.contains(username_in_msg) {
-                    users.insert(username_in_msg.to_string());
+                if !users.contains_key(username_in_msg) {
+                    users.insert(username_in_msg.to_string(),
+                                 User {emote_use: emotes.clone(),
+                                        username: username_in_msg.to_string()});
                 }
 
-                // Check for unique emotes in message
-                for mut emote in emotes.iter_mut() {
-                    if msg.contains(emote.0) {
-                        *emote.1 += 1;
-                        break;
+                // Check emote usage of the message
+                for (username, single_user) in users.iter_mut() {
+                    for (emote, n) in single_user.emote_use.iter_mut() {
+                        if msg.contains(emote) {
+                            *n = *n + 1;
+                            println!("{:?} has used {:?} {:?} times", username, emote, n);
+                        }
                     }
                 }
             }
         }
     }
+
+    // for (x, y) in users {
+    //     println!("{:?}, {:?}", x, y.emote_use);
+    // }
+
 
     // unique chatters
     // for user in users.iter() {
