@@ -4,7 +4,7 @@ extern crate scraper;
 use std::io::{self, BufRead, Read};
 use std::fs::File;
 use std::path::Path;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::ops::Deref;
 use serde::Deserialize;
 
@@ -14,6 +14,7 @@ fn main() {
     download("https://cdn.destiny.gg/emotes/emotes.json", "emotes.json");
 
     let mut emotes = HashMap::new();
+    let mut users: HashSet<String> = HashSet::new();
 
     // create the initial list of emotes for each user and their count
     if let Ok(lines) = read_lines("./emotes.json") {
@@ -22,7 +23,7 @@ fn main() {
                 let emote: Vec<EmoteInfo> = serde_json::from_str(&message)
                     .expect("json not properly formatted");
                 for each in emote.iter() {
-                    emotes.insert(each.get_name().to_string(), 0);
+                    emotes.insert(each.get_emote_name().to_string(), 0);
                 }
             }
         }
@@ -32,8 +33,21 @@ fn main() {
     if let Ok(lines) = read_lines("./2022-02-22.txt") {
         for line in lines {
             if let Ok(message) = line {
+                // Split message into username and message portion FIXME does dgg chat support non ASCII chars?
+                let mut start_of_username_in_msg = message.find("] ").unwrap() + 2;
+                let mut end_of_username_in_msg = message.find(": ").unwrap();
+                let mut start_of_msg = message.find(": ").unwrap() + 2;
+                let mut msg = &message[start_of_msg..];
+                let mut username_in_msg = &message[start_of_username_in_msg..end_of_username_in_msg];
+
+                // Check if username is unique relative to day
+                if !users.contains(username_in_msg) {
+                    users.insert(username_in_msg.to_string());
+                }
+
+                // Check for unique emotes in message
                 for mut emote in emotes.iter_mut() {
-                    if message.contains(emote.0) {
+                    if msg.contains(emote.0) {
                         *emote.1 += 1;
                         break;
                     }
@@ -42,16 +56,16 @@ fn main() {
         }
     }
 
-    // total unique (relative to individual message) uses of each emote
-    for each in emotes.iter() {
-        println!("{:?}, {:?}", each.0, each.1);
-    }
-}
+    // unique chatters
+    // for user in users.iter() {
+    //     println!("{:?}", user);
+    // }
 
-/*
-FIXME add automatic parsing of url to get the date, which will be the name of the file that is
-created
-*/
+    // total unique (relative to individual message) uses of each emote
+    // for each in emotes.iter() {
+        // println!("{:?}, {:?}", each.0, each.1);
+    // }
+}
 
 fn download(url: &str, name: &str) {
     let url = String::from(url);
@@ -90,7 +104,13 @@ struct ImageInfo {
 }
 
 impl EmoteInfo {
-    fn get_name(&self) -> &str {
+    fn get_emote_name(&self) -> &str {
         &self.prefix
+    }
+}
+
+impl User {
+    fn get_username(&self) -> &str {
+        &self.username
     }
 }
