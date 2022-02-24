@@ -8,7 +8,6 @@ use std::collections::HashMap;
 use std::ops::Deref;
 use serde::Deserialize;
 
-
 fn main() {
     download("https://overrustlelogs.net/Destinygg%20chatlog/February%202022/2022-02-22.txt",
         "2022-02-22.txt");
@@ -16,6 +15,7 @@ fn main() {
 
     let mut emotes = HashMap::new();
 
+    // create the initial list of emotes for each user and their count
     if let Ok(lines) = read_lines("./emotes.json") {
         for line in lines {
             if let Ok(message) = line {
@@ -28,17 +28,23 @@ fn main() {
         }
     }
 
-    for each in emotes.iter() {
-        println!("{:?}, {:?}", each.0, each.1);
-    }
-
-    // Go thru chat
+    // Go thru chat and check for emote usage in messages
     if let Ok(lines) = read_lines("./2022-02-22.txt") {
         for line in lines {
             if let Ok(message) = line {
-                // do something with message
+                for mut emote in emotes.iter_mut() {
+                    if message.contains(emote.0) {
+                        *emote.1 += 1;
+                        break;
+                    }
+                }
             }
         }
+    }
+
+    // total unique (relative to individual message) uses of each emote
+    for each in emotes.iter() {
+        println!("{:?}, {:?}", each.0, each.1);
     }
 }
 
