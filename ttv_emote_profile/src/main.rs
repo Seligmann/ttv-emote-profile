@@ -1,11 +1,10 @@
 extern crate reqwest;
 extern crate scraper;
 
-use std::io::{self, BufRead, Read};
+use std::io::{self, BufRead};
 use std::fs::File;
 use std::path::Path;
-use std::collections::{HashMap, HashSet};
-use std::ops::Deref;
+use std::collections::HashMap;
 use serde::Deserialize;
 
 fn main() {
@@ -20,7 +19,7 @@ fn main() {
     if let Ok(lines) = read_lines("./emotes.json") {
         for line in lines {
             if let Ok(message) = line {
-                let mut emote: Vec<EmoteInfo> = serde_json::from_str(&message)
+                let emote: Vec<EmoteInfo> = serde_json::from_str(&message)
                     .expect("json not properly formatted");
                 for each in emote.iter() {
                     emotes.insert(each.get_emote_name().to_string(), 0);
@@ -34,11 +33,11 @@ fn main() {
         for line in lines {
             if let Ok(message) = line {
                 // Split message into username and message portion FIXME does dgg chat support non ASCII chars?
-                let mut start_of_username_in_msg = message.find("] ").unwrap() + 2;
-                let mut end_of_username_in_msg = message.find(": ").unwrap();
-                let mut start_of_msg = message.find(": ").unwrap() + 2;
-                let mut msg = &message[start_of_msg..];
-                let mut username_in_msg = &message[start_of_username_in_msg..end_of_username_in_msg];
+                let start_of_username_in_msg = message.find("] ").unwrap() + 2;
+                let end_of_username_in_msg = message.find(": ").unwrap();
+                let start_of_msg = message.find(": ").unwrap() + 2;
+                let msg = &message[start_of_msg..];
+                let username_in_msg = &message[start_of_username_in_msg..end_of_username_in_msg];
 
                 // Check if username is unique relative to day
                 if !users.contains_key(username_in_msg) {
