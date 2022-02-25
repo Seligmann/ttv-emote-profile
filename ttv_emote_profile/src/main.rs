@@ -4,7 +4,7 @@ extern crate scraper;
 use std::io::{self, BufRead};
 use std::fs::File;
 use std::path::Path;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use serde::Deserialize;
 
 fn main() {
@@ -12,8 +12,9 @@ fn main() {
         "2022-02-22.txt");
     download("https://cdn.destiny.gg/emotes/emotes.json", "emotes.json");
 
-    let mut emotes: HashMap<String, i32> = HashMap::new();
+    let mut valid_emotes: HashSet<String> = HashSet::new();
     let mut users: HashMap<String, User> = HashMap::new();
+    let mut init_emote_list: HashMap<String, i32> = HashMap::new();
 
     // create the initial list of emotes for each user and their count
     if let Ok(lines) = read_lines("./emotes.json") {
@@ -22,7 +23,8 @@ fn main() {
                 let emote: Vec<EmoteInfo> = serde_json::from_str(&message)
                     .expect("json not properly formatted");
                 for each in emote.iter() {
-                    emotes.insert(each.get_emote_name().to_string(), 0);
+                    valid_emotes.insert(each.prefix.to_string());
+                    init_emote_list.insert(each.prefix.to_string(), 0);
                 }
             }
         }
@@ -42,17 +44,22 @@ fn main() {
                 // Check if username is unique relative to day
                 if !users.contains_key(username_in_msg) {
                     users.insert(username_in_msg.to_string(),
-                                 User {emote_use: emotes.clone(),
+                                 User {emote_use: init_emote_list.clone(), // fixme ownership issue?
                                         username: username_in_msg.to_string()});
                 }
 
-                // Check emote usage of the message
-                for (username, single_user) in users.iter_mut() {
-                    for (emote, n) in single_user.emote_use.iter_mut() {
-                        if msg.contains(emote) {
-                            *n = *n + 1;
-                            println!("{:?} has used {:?} {:?} times", username, emote, n);
-                        }
+                // Check emote usage in the message
+                let mut used_emotes = HashSet::new();
+                for emote in valid_emotes.iter() {
+                    if msg.contains(emote) && !used_emotes.contains(emote) {
+                        used_emotes.insert(emote.to_string());
+                        *users.get_mut(username_in_msg).unwrap().emote_use.get_mut(emote).unwrap() += 1;
+
+                        println!("{:?} used {:?} {:?} times",
+                                 username_in_msg,
+                                 emote,
+                                 *users.get_mut(username_in_msg).unwrap().emote_use.get_mut(emote).unwrap()
+                        )
                     }
                 }
             }
