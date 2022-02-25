@@ -53,12 +53,22 @@ fn main() {
                 for emote in valid_emotes.iter() {
                     if msg.contains(emote) && !used_emotes.contains(emote) {
                         used_emotes.insert(emote.to_string());
-                        *users.get_mut(username_in_msg).unwrap().emote_use.get_mut(emote).unwrap() += 1;
+                        *users
+                            .get_mut(username_in_msg)
+                            .unwrap()
+                            .emote_use
+                            .get_mut(emote)
+                            .unwrap() += 1;
 
                         println!("{:?} used {:?} {:?} times",
                                  username_in_msg,
                                  emote,
-                                 *users.get_mut(username_in_msg).unwrap().emote_use.get_mut(emote).unwrap()
+                                 *users
+                                     .get_mut(username_in_msg)
+                                     .unwrap()
+                                     .emote_use
+                                     .get_mut(emote)
+                                     .unwrap()
                         )
                     }
                 }
