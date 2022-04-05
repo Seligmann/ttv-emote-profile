@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Twitch Emote Profile</title>
+</head>
+<body>
+
+<img src="" id="hackermans" width="250" />
+<script>
+
+    console.log('fetching hackermans gif')
+
+    catchHackermans()
+        .then(response => {
+            console.log('hackermans.gif caught EZ');
+        })
+        .catch (error => {
+            console.log('hackermans.gif din do nuffin pepoThink');
+            console.error(error);
+        })
+
+    async function catchHackermans () {
+        const response = await fetch('hackermans.gif');
+        const blob = await response.blob();
+        document.getElementById('hackermans').src = URL.createObjectURL(blob);
+    }
+
+</script>
+
+</body>
+</html>
